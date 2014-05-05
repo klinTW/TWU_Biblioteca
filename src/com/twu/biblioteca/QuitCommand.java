@@ -13,7 +13,7 @@ public class QuitCommand implements Command {
     }
 
     @Override
-    public String displayName() {
-        return "Quit";
+    public String returnName() {
+        return "0) Quit";
     }
 }

@@ -1,20 +1,19 @@
 package com.twu.biblioteca;
 
-public class ListBookCommand implements Command {
-
+public class ListMoviesCommand implements Command {
     private Library library;
 
-    public ListBookCommand(Library library){
+    public ListMoviesCommand(Library library) {
         this.library = library;
     }
 
     @Override
     public void execute() {
-        library.listBooks();
+        library.listMovies();
     }
 
     @Override
     public String returnName() {
-        return "1) List books";
+        return "4) List movies";
     }
 }

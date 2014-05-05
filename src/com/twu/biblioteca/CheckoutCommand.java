@@ -27,7 +27,7 @@ public class CheckoutCommand implements Command {
     }
 
     @Override
-    public String displayName() {
-        return "Checkout";
+    public String returnName() {
+        return "2) Check out book";
     }
 }

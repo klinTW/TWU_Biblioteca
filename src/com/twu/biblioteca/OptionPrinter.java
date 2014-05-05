@@ -1,19 +1,23 @@
 package com.twu.biblioteca;
 
 import java.io.PrintStream;
+import java.util.HashMap;
 
 public class OptionPrinter {
     private PrintStream printStream;
+    private HashMap<String, Command> commandMap;
 
-    public OptionPrinter(PrintStream printStream) {
+    public OptionPrinter(PrintStream printStream, HashMap<String, Command> commandMap) {
         this.printStream = printStream;
+        this.commandMap = commandMap;
     }
 
 
     public void print() {
-        printStream.println("1) List books");
-        printStream.println("2) Check out book");
-        printStream.println("3) Return book");
-        printStream.println("4) Quit");
+        Command currentCommand;
+        for (Integer i = 0; i < commandMap.keySet().size(); i++) {
+            currentCommand = commandMap.get(i.toString());
+            printStream.println(currentCommand.returnName());
+        }
     }
 }

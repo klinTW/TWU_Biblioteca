@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -20,14 +21,18 @@ public class LibraryTest {
     private PrintStream printStream;
     private StringJoiner joiner;
     private Collection<String> checkedOutBooks;
+    private Movie movie;
+    private ArrayList<Movie> movieList;
 
     @Before
     public void setUp() throws Exception {
         books = new HashSet<String>();
         checkedOutBooks = new HashSet<String>();
+        movie = mock(Movie.class);
+        movieList = new ArrayList<Movie>();
         printStream = mock(PrintStream.class);
         joiner = mock(StringJoiner.class);
-        library = new Library(books, checkedOutBooks, printStream, joiner);
+        library = new Library(books, checkedOutBooks, printStream, joiner, movieList);
     }
 
 
@@ -56,7 +61,7 @@ public class LibraryTest {
     @Test
     public void shouldReturnBook(){
         checkedOutBooks.add("Book 3");
-        library = new Library(books, checkedOutBooks, printStream, joiner);
+        library = new Library(books, checkedOutBooks, printStream, joiner, movieList);
         library.returnBook("Book 3");
         assertTrue(books.contains("Book 3"));
     }
@@ -64,7 +69,7 @@ public class LibraryTest {
     @Test
     public void shouldPrintSuccessfulCheckoutMessage() {
         books.add("A Good Book");
-        library = new Library(books, checkedOutBooks, printStream, joiner);
+        library = new Library(books, checkedOutBooks, printStream, joiner, movieList);
         library.checkout("A Good Book");
         verify(printStream).println("Thank you! Enjoy the book.");
     }
@@ -78,7 +83,7 @@ public class LibraryTest {
     @Test
     public void shouldPrintSuccessfulReturnMessage() {
         checkedOutBooks.add("Boo!");
-        library = new Library(books, checkedOutBooks, printStream, joiner);
+        library = new Library(books, checkedOutBooks, printStream, joiner, movieList);
         library.returnBook("Boo!");
         verify(printStream).println("Thank you for returning the book.");
     }
@@ -86,7 +91,7 @@ public class LibraryTest {
     @Test
     public void shouldReturnTrueIfBookIsCheckedOut(){
         books.add("boo2");
-        library = new Library(books, checkedOutBooks, printStream, joiner);
+        library = new Library(books, checkedOutBooks, printStream, joiner, movieList);
         library.checkout("boo2");
         assertTrue(library.isCheckedOut("boo2"));
     }
@@ -94,7 +99,7 @@ public class LibraryTest {
     @Test
     public void shouldRemoveBookFromCheckoutListWhenReturned() {
         checkedOutBooks.add("A Book About Books");
-        library = new Library(books, checkedOutBooks, printStream, joiner);
+        library = new Library(books, checkedOutBooks, printStream, joiner, movieList);
         library.returnBook("A Book About Books");
         assertFalse(library.isCheckedOut("A Book About Books"));
     }
@@ -103,6 +108,42 @@ public class LibraryTest {
     public void shouldPrintUnsuccessfulReturnMessage() {
         library.returnBook("No Way!");
         verify(printStream).println("That is not a valid book to return.");
+    }
+
+    @Test
+    public void shouldPrintListOfMovies() {
+        ArrayList<String> movieInfo = new ArrayList<String>();
+        movieInfo.add("A Movie");
+        movieInfo.add("A Year");
+        movieInfo.add("A Director");
+        movieInfo.add("A Rating");
+        when(movie.giveInformation()).thenReturn(movieInfo);
+        library.listMovies();
+        verify(printStream).println("A Movie, A Year, A Director, A Rating");
+    }
+
+    @Test
+    public void shouldPrintMultipleMovies(){
+        Movie movie2 = mock(Movie.class);
+        movieList.add(movie);
+        movieList.add(movie2);
+        library = new Library(books, checkedOutBooks, printStream, joiner, movieList);
+        ArrayList<String> movieInfo = new ArrayList<String>();
+        movieInfo.add("A Movie");
+        movieInfo.add("A Year");
+        movieInfo.add("A Director");
+        movieInfo.add("A Rating");
+        ArrayList<String> movieInfo2 = new ArrayList<String>();
+        movieInfo2.add("A Second");
+        movieInfo2.add("A Year");
+        movieInfo2.add("Kevin");
+        movieInfo2.add("44444");
+        when(movie.giveInformation()).thenReturn(movieInfo);
+        when(movie2.giveInformation()).thenReturn(movieInfo2);
+        library.listMovies();
+        verify(printStream).println("A Movie, A Year, A Director, A Rating");
+        verify(printStream).println("A Second, A Year, Kevin, 44444");
+
     }
 
 

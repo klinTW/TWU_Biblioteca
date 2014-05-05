@@ -33,7 +33,8 @@ public class MenuTest {
         commandMap.put("1", new ListBookCommand(library));
         commandMap.put("2", new CheckoutCommand(out, library, reader));
         commandMap.put("3", new ReturnCommand(out, reader, library));
-        commandMap.put("4", new QuitCommand(done));
+        commandMap.put("4", new ListMoviesCommand(library));
+        commandMap.put("0", new QuitCommand(done));
 
         menu = new Menu(out, reader, optionPrinter, commandMap);
     }
@@ -94,6 +95,13 @@ public class MenuTest {
         when(reader.readLine()).thenReturn("3").thenReturn("book");
         menu.run();
         verify(library).returnBook("book");
+    }
+
+    @Test
+    public void shouldAttemptToListMovies() throws IOException {
+        when(reader.readLine()).thenReturn("4");
+        menu.run();
+        verify(library).listMovies();
     }
 
 }

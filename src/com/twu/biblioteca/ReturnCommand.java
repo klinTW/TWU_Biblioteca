@@ -27,7 +27,7 @@ public class ReturnCommand implements Command {
     }
 
     @Override
-    public String displayName() {
-        return "Return Book";
+    public String returnName() {
+        return "3) Return book";
     }
 }
